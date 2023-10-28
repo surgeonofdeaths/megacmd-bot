@@ -1,8 +1,11 @@
 import subprocess
 
 
-def _execute(command: str) -> str:
-    return subprocess.check_output([command]).decode()
+def _execute(command: str, *parameters) -> str:
+    commands = [[command]]
+    for param in parameters:
+        commands.append([param])
+    return subprocess.check_output(*commands).decode()
 
 
 def mega_ls() -> list[str]:
@@ -10,8 +13,8 @@ def mega_ls() -> list[str]:
     return proccessed_data
 
 
-def mega_cd() -> str:
-    return _execute(command='mega-cd')
+def mega_cd(dir: str, *parameters) -> str:
+    return _execute(command='mega-cd', *parameters)
 
 
 def mega_pwd() -> str:
