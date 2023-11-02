@@ -12,5 +12,9 @@ async def set_main_menu(bot: Bot):
             command="info",
             description="What can this bot do?",
         ),
+        BotCommand(
+            command="navigate",
+            description="Navigate through your folder structure",
+        ),
     ]
     await bot.set_my_commands(main_menu_commands)

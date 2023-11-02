@@ -3,9 +3,7 @@ def is_file(title: str) -> bool:
 
 
 def decide_file_or_dir(ls_data: list[str]) -> list[set[str, bool]]:
-    ls_data = [
-        (x, True) if is_file(x) else (x, False) for x in ls_data
-    ]
+    ls_data = [(x, True) if is_file(x) else (x, False) for x in ls_data]
     return ls_data
 
 
