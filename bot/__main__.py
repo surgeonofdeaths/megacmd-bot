@@ -5,7 +5,7 @@ from loguru import logger
 from config.config import config
 from handlers import handler
 from keyboards.main_menu import set_main_menu
-# from bot.misc import redis
+from misc import redis
 
 import asyncio
 
@@ -22,8 +22,8 @@ async def main():
     logger.info("Starting bot")
 
     bot: Bot = Bot(token=config.bot.token, parse_mode=config.bot.parse_mode)
-    # dp: Dispatcher = Dispatcher(storage=RedisStorage(redis))
-    dp: Dispatcher = Dispatcher()
+    dp: Dispatcher = Dispatcher(storage=RedisStorage(redis))
+    # dp: Dispatcher = Dispatcher()
 
     dp.include_router(handler.router)
 

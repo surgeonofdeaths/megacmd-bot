@@ -6,6 +6,7 @@ from loguru import logger
 from services import megacmd, keyboard
 from keyboards.factory_kb import NavigationCallbackFactory
 from lexicon.lexicon import LEXICON, LEXICON_COMMANDS
+from misc import redis
 
 router = Router()
 
@@ -38,7 +39,12 @@ async def process_dir_action(
 async def process_file_action(
     query: CallbackQuery, callback_data: NavigationCallbackFactory
 ):
-    await query.answer("file")
+    if not len(callback_data.title):
+        print(callback_data.title)
+        print(callback_data.uuid)
+        print(redis.get(callback_data.uuid))
+
+    await query.answer(redis.get(callback_data.uuid))
 
 
 @router.callback_query(NavigationCallbackFactory.filter(F.action == "go_back"))
