@@ -1,9 +1,11 @@
 from aiogram import Bot, Dispatcher
+from aiogram.fsm.storage.redis import RedisStorage
 from loguru import logger
 
-from bot.config.config import config
-from bot.handlers import handler
-from bot.keyboards.main_menu import set_main_menu
+from config.config import config
+from handlers import handler
+from keyboards.main_menu import set_main_menu
+# from bot.misc import redis
 
 import asyncio
 
@@ -20,6 +22,7 @@ async def main():
     logger.info("Starting bot")
 
     bot: Bot = Bot(token=config.bot.token, parse_mode=config.bot.parse_mode)
+    # dp: Dispatcher = Dispatcher(storage=RedisStorage(redis))
     dp: Dispatcher = Dispatcher()
 
     dp.include_router(handler.router)

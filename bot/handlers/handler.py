@@ -3,9 +3,9 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from loguru import logger
 
-from bot.services import megacmd, keyboard
-from bot.keyboards.factory_kb import NavigationCallbackFactory
-from bot.lexicon.lexicon import LEXICON, LEXICON_COMMANDS
+from services import megacmd, keyboard
+from keyboards.factory_kb import NavigationCallbackFactory
+from lexicon.lexicon import LEXICON, LEXICON_COMMANDS
 
 router = Router()
 
@@ -25,8 +25,8 @@ async def process_navigate_command(message: Message):
 async def process_dir_action(
     query: CallbackQuery, callback_data: NavigationCallbackFactory
 ):
-    print(query.message)
-    megacmd.mega_cd(query.data.title)
+    print(callback_data.title)
+    megacmd.mega_cd(callback_data.title)
     buttons = keyboard.form_nav_buttons()
     kb = keyboard.build_inline_kb(*buttons)
 

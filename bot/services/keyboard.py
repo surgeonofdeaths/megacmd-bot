@@ -1,9 +1,9 @@
 from aiogram.utils.keyboard import (InlineKeyboardBuilder,
                                     InlineKeyboardButton, InlineKeyboardMarkup)
 
-from bot.keyboards.factory_kb import NavigationCallbackFactory
-from bot.lexicon.lexicon import LEXICON
-from bot.services import megacmd, other
+from keyboards.factory_kb import NavigationCallbackFactory
+from lexicon.lexicon import LEXICON
+from services import megacmd, other
 
 from subprocess import CalledProcessError
 
