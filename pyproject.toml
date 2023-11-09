@@ -12,6 +12,7 @@ loguru = "^0.7.2"
 sqlalchemy = "^2.0.22"
 pydantic-settings = "^2.0.3"
 redis = "^5.0.1"
+aioredis = "^2.0.1"
 
 
 [build-system]

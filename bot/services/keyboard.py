@@ -18,13 +18,13 @@ def build_inline_kb(*buttons: list[str]) -> InlineKeyboardMarkup:
     return kb_builder.as_markup()
 
 
-def form_nav_buttons() -> list[InlineKeyboardButton]:
+async def form_nav_buttons() -> list[InlineKeyboardButton]:
     buttons = [
         InlineKeyboardButton(
             text=other.form_title(title, is_file=is_file),
             callback_data=NavigationCallbackFactory(
-                title=other.generate_title_or_uuid(title),
-                uuid=other.generate_title_or_uuid(title),
+                title=other.generate_title(title),
+                uuid=await other.generate_uuid(title),
                 is_file=is_file,
                 action=other.define_action_button(is_file=is_file),
             ).pack(),
@@ -32,7 +32,8 @@ def form_nav_buttons() -> list[InlineKeyboardButton]:
         for title, is_file in other.decide_file_or_dir(megacmd.mega_ls())
     ]
     try:
-        # TODO: store in FSM if there are files/dirs a level higher
+        # TODO: store in FSM if there are files/dirs a level higher.
+        # go_back button
         megacmd.mega_ls("..")
         buttons.insert(
             0,
@@ -40,6 +41,7 @@ def form_nav_buttons() -> list[InlineKeyboardButton]:
                 text=LEXICON["go_back"],
                 callback_data=NavigationCallbackFactory(
                     title="go_back",
+                    uuid=None,
                     is_file=False,
                     action="go_back"
                 ).pack(),

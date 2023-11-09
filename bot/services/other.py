@@ -1,3 +1,5 @@
+from keyboards.factory_kb import NavigationCallbackFactory
+
 from misc import redis
 from uuid import uuid4
 
@@ -32,14 +34,27 @@ def check_title_length(title: str) -> bool:
     return len(title) >= 51
 
 
-def generate_title_or_uuid(title: str) -> str:
-    """
-    returns title of a file or a dir if its length
-    is valid for callback_data else returns uuid
-    and caches the title
-    """
-    if len(title) >= 51:
+async def _set_title(title, uuid) -> None:
+    await redis.set(uuid, title)
+    redis_get = await redis.get(uuid)
+    print("redis get: ", redis_get.decode("UTF-8"))
+
+
+async def generate_uuid(title: str) -> str | None:
+    if len(title) > 51:
         uuid = str(uuid4())
-        redis.set(uuid, title)
+        await _set_title(title, uuid)
         return uuid
-    return title
+
+
+def generate_title(title: str) -> str | None:
+    if len(title) <= 51:
+        return title
+
+
+async def get_filename(callback_data: NavigationCallbackFactory) -> str:
+    if callback_data.title:
+        name = callback_data.title
+    else:
+        name = await redis.get(callback_data.uuid)
+    return name

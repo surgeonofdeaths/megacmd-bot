@@ -3,7 +3,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from loguru import logger
 
-from services import megacmd, keyboard
+from services import megacmd, keyboard, other
 from keyboards.factory_kb import NavigationCallbackFactory
 from lexicon.lexicon import LEXICON, LEXICON_COMMANDS
 from misc import redis
@@ -13,7 +13,7 @@ router = Router()
 
 @router.message(Command(commands=["navigate"]))
 async def process_navigate_command(message: Message):
-    buttons = keyboard.form_nav_buttons()
+    buttons = await keyboard.form_nav_buttons()
     kb = keyboard.build_inline_kb(*buttons)
 
     await message.answer(
@@ -26,25 +26,25 @@ async def process_navigate_command(message: Message):
 async def process_dir_action(
     query: CallbackQuery, callback_data: NavigationCallbackFactory
 ):
-    print(callback_data.title)
+    # TODO: toggle dir selection mode which allows
+    # to compress directory to rar/zip format
     megacmd.mega_cd(callback_data.title)
-    buttons = keyboard.form_nav_buttons()
+    buttons = await keyboard.form_nav_buttons()
     kb = keyboard.build_inline_kb(*buttons)
+    filename = await other.get_filename(callback_data)
 
+    await query.answer(filename)
     await query.message.edit_reply_markup(
         reply_markup=kb,
     )
 
 
+@router.callback_query(NavigationCallbackFactory.filter(F.action == "file"))
 async def process_file_action(
     query: CallbackQuery, callback_data: NavigationCallbackFactory
 ):
-    if not len(callback_data.title):
-        print(callback_data.title)
-        print(callback_data.uuid)
-        print(redis.get(callback_data.uuid))
-
-    await query.answer(redis.get(callback_data.uuid))
+    filename = await other.get_filename(callback_data)
+    await query.answer(filename)
 
 
 @router.callback_query(NavigationCallbackFactory.filter(F.action == "go_back"))
@@ -52,7 +52,7 @@ async def process_go_back_action(
     query: CallbackQuery, callback_data: NavigationCallbackFactory
 ):
     megacmd.mega_cd("..")
-    buttons = keyboard.form_nav_buttons()
+    buttons = await keyboard.form_nav_buttons()
     kb = keyboard.build_inline_kb(*buttons)
     await query.message.edit_reply_markup(
         reply_markup=kb,

@@ -23,7 +23,6 @@ async def main():
 
     bot: Bot = Bot(token=config.bot.token, parse_mode=config.bot.parse_mode)
     dp: Dispatcher = Dispatcher(storage=RedisStorage(redis))
-    # dp: Dispatcher = Dispatcher()
 
     dp.include_router(handler.router)
 
