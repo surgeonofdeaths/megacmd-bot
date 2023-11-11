@@ -3,5 +3,9 @@ from sqlalchemy.orm import sessionmaker
 
 from config.config import config
 
-engine = create_async_engine(config)
+
+url = f"postgresql+psycopg2://postgres:{config.db.password}@" \
+      f"{config.db.host}" \
+      f"/{config.db.database}"
+engine = create_async_engine(url)
 SessionLocal = sessionmaker(bind=engine, class_=AsyncSession)
