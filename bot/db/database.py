@@ -1,11 +1,14 @@
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+# from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+# from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
 from config.config import config
 
 
-url = f"postgresql+psycopg2://postgres:{config.db.password}@" \
-      f"{config.db.host}" \
+url = f"postgresql+{config.db.drivername}://{config.db.user}:{config.db.password}@" \
+      f"{config.db.host}:{config.db.port}" \
       f"/{config.db.database}"
-engine = create_async_engine(url)
-SessionLocal = sessionmaker(bind=engine, class_=AsyncSession)
+
+print(url)
+engine = create_async_engine(url=url, echo=True)
+sessionmaker = async_sessionmaker(engine, expire_on_commit=False)

@@ -1,6 +1,7 @@
 /database*
 bot/config/settings.json
 .vscode
+ps.pgsql
 
 __pycache__/
 *.py[cod]

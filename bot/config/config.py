@@ -18,10 +18,11 @@ class Logging(BaseSettings):
 
 class DatabaseSettings(BaseSettings):
     drivername: str
-    username: str
+    user: str
     password: str
     host: str
     port: int
+    database: str
 
 
 class Settings(BaseSettings):
