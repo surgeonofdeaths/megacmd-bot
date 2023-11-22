@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from loguru import logger
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from services import megacmd, keyboard, other
 from keyboards.factory_kb import NavigationCallbackFactory
@@ -24,7 +25,9 @@ async def process_navigate_command(message: Message):
 
 @router.callback_query(NavigationCallbackFactory.filter(F.action == "dir"))
 async def process_dir_action(
-    query: CallbackQuery, callback_data: NavigationCallbackFactory
+    query: CallbackQuery,
+    callback_data: NavigationCallbackFactory,
+    session: AsyncSession,
 ):
     # TODO: toggle dir selection mode which allows
     # to compress directory to rar/zip format
@@ -32,6 +35,7 @@ async def process_dir_action(
     buttons = await keyboard.form_nav_buttons()
     kb = keyboard.build_inline_kb(*buttons)
     filename = await other.get_filename(callback_data)
+    # print(session.merge())
 
     await query.answer(filename)
     await query.message.edit_reply_markup(

@@ -4,10 +4,10 @@ from loguru import logger
 
 from config.config import config
 from handlers import handler
-from keyboards.main_menu import set_main_menu
+from keyboards import set_main_menu
 from misc import redis
-from middlewares.db import DbSessionMiddleware
-from db.database import sessionmaker
+from middlewares import DbSessionMiddleware
+from db import sessionmaker
 
 import asyncio
 

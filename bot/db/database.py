@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 from config.config import config
 
 
-url = f"postgresql+{config.db.drivername}://{config.db.user}:{config.db.password}@" \
+url = f"postgresql+{config.db.drivername}://" \
+      f"{config.db.user}:{config.db.password}@" \
       f"{config.db.host}:{config.db.port}" \
       f"/{config.db.database}"
 
