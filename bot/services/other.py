@@ -2,6 +2,7 @@ from keyboards.factory_kb import NavigationCallbackFactory
 
 from misc import redis
 from uuid import uuid4
+from loguru import logger
 
 
 def is_file(title: str) -> bool:
@@ -37,7 +38,7 @@ def check_title_length(title: str) -> bool:
 async def _set_title(title, uuid) -> None:
     await redis.set(uuid, title)
     redis_get = await redis.get(uuid)
-    print("redis get: ", redis_get.decode("UTF-8"))
+    logger.info("redis get: " + redis_get.decode("UTF-8"))
 
 
 async def generate_uuid(title: str) -> str | None:
